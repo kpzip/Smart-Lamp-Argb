@@ -1,38 +1,46 @@
 #include <Adafruit_NeoPixel.h>
-#define LEDPIN 6       // Connect the Data pin from the strip to this pin on the Arduino.
-#define NUM_PIXELS 60  // The number of pixels in your LED strip.
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
-const int TrigPin = 2;
-const int EchoPin = 3;
-float cm;
-int wait = 100;  // Interval in ms between updates to the LED strip.
-int i = 0;
+#include "effects.h"
+#define LEDPIN 6                // Connect the Data pin from the strip to this pin on the Arduino.
+#define TRIG_PIN 2              // Pin connected to the Trigger input on the ultrasonic sensor
+#define ECHO_PIN 3              // Pin connected to the Echo output on the ultrasonic sensor
+#define MIN_POLL_DELAY_MS 10    // Minimum time between sending pulses on the Trigger pin (from the datasheet)
+#define NUM_PIXELS 60           // The number of pixels in your LED strip.
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
+
+const int wait_time = 100;      // Interval in ms between updates to the LED strip.
+const int threshold_cm = 100;   // Threshold distance to trigger the lamp
 
 void setup() {
   Serial.begin(9600);
-  pinMode(TrigPin, OUTPUT);
-  pinMode(EchoPin, INPUT);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
   strip.begin();
   strip.clear();
   strip.show();
 }
 void loop() {
 
-  digitalWrite(TrigPin, LOW);
+  // Sequence to trigger an ultrasonic sensor read
+  digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
-  digitalWrite(TrigPin, HIGH);
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(TrigPin, LOW);
-  cm = pulseIn(EchoPin, HIGH) / 58.0;  //The echo time is converted into cm
-  cm = (int(cm * 100.0)) / 100.0;      //Keep two decimal places
+  digitalWrite(TRIG_PIN, LOW);
+
+  // take in the distance from the ultrasonic sensor and convert to centimeters
+  float cm = pulseIn(ECHO_PIN, HIGH) / 58.0;
+  // Keep two decimal places
+  cm = (int(cm * 100.0)) / 100.0;
+
+  // Debug info
   Serial.print("Distance\t=\t");
   Serial.print(cm);
   Serial.print("cm");
   Serial.println();
 
 
-  if (cm < 100) {
+  if (cm < threshold_cm) {
 
     for (int i = 0; i < strip.numPixels() - 1; i++) {
       // starting at i, draw the 7 color rainbow}
@@ -47,14 +55,15 @@ void loop() {
       strip.setPixelColor((i + 6) % np, 110, 70, 0);   // orange
       strip.setPixelColor((i + 7) % np, 150, 0, 0);    // red
       strip.show();
-      delay(wait);
+      delay(wait_time);
       strip.clear();
       strip.show();
     }
 
-  } else {
+  }
+  else {
     strip.clear();
     strip.show();
-    delay(10);
+    delay(MIN_POLL_DELAY_MS);
   }
 }
