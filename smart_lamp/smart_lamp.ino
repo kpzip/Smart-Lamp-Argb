@@ -55,28 +55,19 @@ void loop() {
 
 
   if (cm < threshold_cm) {
-    /*
-    for (int i = 0; i < strip.numPixels() - 1; i++) {
-      // starting at i, draw the 7 color rainbow}
-      // a seven segment rainbow with red on the highest pixel
-      int np = strip.numPixels();                      // we use the modulo function with this
-      strip.setPixelColor(i % np, 0, 0, 0);            // off
-      strip.setPixelColor((i + 1) % np, 25, 0, 25);    // violet
-      strip.setPixelColor((i + 2) % np, 255, 0, 255);  // indigo
-      strip.setPixelColor((i + 3) % np, 0, 0, 150);    // blue
-      strip.setPixelColor((i + 4) % np, 0, 150, 0);    // green
-      strip.setPixelColor((i + 5) % np, 255, 255, 0);  // yellow
-      strip.setPixelColor((i + 6) % np, 110, 70, 0);   // orange
-      strip.setPixelColor((i + 7) % np, 150, 0, 0);    // red
-      strip.show();
-      delay(wait_time);
-      strip.clear();
-      strip.show();
-    }*/
+#ifdef DEBUG
+    Serial.println("Lighting Activated");
+#endif
+    // Play around with different effects
     Effects::rainbow_wave(&strip, 6, wait_time);
+    //Effects::retro_bulb_border_strobe(&strip, wait_time, 10, { .r = 255, .g = 0, .b = 0 });
+    //Effects::rgb_drift(&strip, 10, 2);
 
   }
   else {
+#ifdef DEBUG
+    Serial.println("Lighting Not Activated");
+#endif
     strip.clear();
     strip.show();
     delay(MIN_POLL_DELAY_MS);
