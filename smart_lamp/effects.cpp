@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include "util.h"
 #include "effects.h"
+
 #define max_colors 20
 
 // Wave length must not be > max_colors!
