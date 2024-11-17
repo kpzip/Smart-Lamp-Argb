@@ -59,9 +59,9 @@ void loop() {
     Serial.println("Lighting Activated");
 #endif
     // Play around with different effects
-    Effects::rainbow_wave(&strip, 6, wait_time);
-    //Effects::retro_bulb_border_strobe(&strip, wait_time, 10, { .r = 255, .g = 0, .b = 0 });
-    //Effects::rgb_drift(&strip, 10, 2);
+    Effects::rainbowWave(&strip, 6, wait_time);
+    // Effects::retroBulbBorderStrobe(&strip, wait_time, 10, { .r = 255, .g = 0, .b = 0 });
+    // Effects::rgbDrift(&strip, 10, 2);
 
   }
   else {

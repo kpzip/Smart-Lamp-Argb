@@ -1,13 +1,12 @@
 #include <Adafruit_NeoPixel.h>
 #include <stdint.h>
-//#include <cmath.h>
 #include "util.h"
 #include "effects.h"
 
 #define max_colors 20
 
 // Wave length must not be > max_colors!
-void Effects::rainbow_wave(Adafruit_NeoPixel *strip, int wave_length, long wait, float max_hue=360, float saturation=100.0, float intensity=100.0, bool overflow=false, bool start_small=true) {
+void Effects::rainbowWave(Adafruit_NeoPixel *strip, int wave_length, long wait, float max_hue=360, float saturation=100.0, float intensity=100.0, bool overflow=false, bool start_small=true) {
   int np = strip->numPixels();
 
   uint8_t r_space[max_colors], g_space[max_colors], b_space[max_colors] = {0};
@@ -41,7 +40,7 @@ void Effects::rainbow_wave(Adafruit_NeoPixel *strip, int wave_length, long wait,
   }
 }
 
-void Effects::retro_bulb_border_strobe(Adafruit_NeoPixel *strip, long wait, long iterations, Util::RGBColor on_color, Util::RGBColor off_color={ .r = 0, .g = 0, .b = 0 }) {
+void Effects::retroBulbBorderStrobe(Adafruit_NeoPixel *strip, long wait, long iterations, Util::RGBColor on_color, Util::RGBColor off_color={ .r = 0, .g = 0, .b = 0 }) {
   int np = strip->numPixels();
 
   for (long i = 0; i < iterations; i++) {
@@ -60,7 +59,7 @@ void Effects::retro_bulb_border_strobe(Adafruit_NeoPixel *strip, long wait, long
   }
 }
 
-void Effects::rgb_drift(Adafruit_NeoPixel *strip, long speed, int cycles, float hue_step = 1, float max_hue=360, float saturation=100.0, float intensity=100.0) {
+void Effects::rgbDrift(Adafruit_NeoPixel *strip, long speed, int cycles, float hue_step = 1, float max_hue=360, float saturation=100.0, float intensity=100.0) {
   int np = strip->numPixels();
 
   int iterations = cycles * (max_hue/hue_step);
