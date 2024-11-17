@@ -1,7 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "effects.h"
 #define DEBUG                   // Comment out in final version to disable debug info being printed to the serial port
-//#define USE_DISTANCE_SENSOR     // Comment out to disable using the ultrasonic sensor for testing purposes
+#define USE_DISTANCE_SENSOR     // Comment out to disable using the ultrasonic sensor for testing purposes
 
 #define LEDPIN 6                // Connect the Data pin from the strip to this pin on the Arduino.
 #define TRIG_PIN 2              // Pin connected to the Trigger input on the ultrasonic sensor
