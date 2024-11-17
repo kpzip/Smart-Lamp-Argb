@@ -1,6 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "effects.h"
 #define DEBUG                   // Comment out in final version to disable debug info being printed to the serial port
+//#define USE_DISTANCE_SENSOR     // Comment out to disable using the ultrasonic sensor for testing purposes
 
 #define LEDPIN 6                // Connect the Data pin from the strip to this pin on the Arduino.
 #define TRIG_PIN 2              // Pin connected to the Trigger input on the ultrasonic sensor
@@ -10,21 +11,24 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
-const int wait_time = 100;      // Interval in ms between updates to the LED strip.
+const long wait_time = 100;      // Interval in ms between updates to the LED strip.
 const int threshold_cm = 100;   // Threshold distance to trigger the lamp
 
 void setup() {
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
+#ifdef USE_DISTANCE_SENSOR
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
+#endif
   strip.begin();
   strip.clear();
   strip.show();
 }
 void loop() {
 
+#ifdef USE_DISTANCE_SENSOR
   // Sequence to trigger an ultrasonic sensor read
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
@@ -36,6 +40,10 @@ void loop() {
   float cm = pulseIn(ECHO_PIN, HIGH) / 58.0;
   // Keep two decimal places
   cm = (int(cm * 100.0)) / 100.0;
+#endif
+#ifndef USE_DISTANCE_SENSOR
+  float cm = 0.0;
+#endif
 
 #ifdef DEBUG
   // Debug info
@@ -47,7 +55,7 @@ void loop() {
 
 
   if (cm < threshold_cm) {
-
+    /*
     for (int i = 0; i < strip.numPixels() - 1; i++) {
       // starting at i, draw the 7 color rainbow}
       // a seven segment rainbow with red on the highest pixel
@@ -64,7 +72,8 @@ void loop() {
       delay(wait_time);
       strip.clear();
       strip.show();
-    }
+    }*/
+    Effects::rainbow_wave(&strip, 6, wait_time);
 
   }
   else {
