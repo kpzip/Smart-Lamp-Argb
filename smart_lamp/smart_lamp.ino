@@ -1,5 +1,7 @@
 #include <Adafruit_NeoPixel.h>
 #include "effects.h"
+#define DEBUG                   // Comment out in final version to disable debug info being printed to the serial port
+
 #define LEDPIN 6                // Connect the Data pin from the strip to this pin on the Arduino.
 #define TRIG_PIN 2              // Pin connected to the Trigger input on the ultrasonic sensor
 #define ECHO_PIN 3              // Pin connected to the Echo output on the ultrasonic sensor
@@ -12,7 +14,9 @@ const int wait_time = 100;      // Interval in ms between updates to the LED str
 const int threshold_cm = 100;   // Threshold distance to trigger the lamp
 
 void setup() {
+#ifdef DEBUG
   Serial.begin(9600);
+#endif
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
   strip.begin();
@@ -33,11 +37,13 @@ void loop() {
   // Keep two decimal places
   cm = (int(cm * 100.0)) / 100.0;
 
+#ifdef DEBUG
   // Debug info
   Serial.print("Distance\t=\t");
   Serial.print(cm);
   Serial.print("cm");
   Serial.println();
+#endif
 
 
   if (cm < threshold_cm) {
