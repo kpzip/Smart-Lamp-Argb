@@ -75,7 +75,23 @@ void Effects::rgbDrift(Adafruit_NeoPixel *strip, long speed, int cycles, float h
       strip->clear();
       strip->show();
       current_hue += hue_step;
-      current_hue = fmod(current_hue, 360.0);
+      current_hue = fmod(current_hue, max_hue);
+  }
+
+}
+
+void Effects::rgbStrobe(Adafruit_NeoPixel *strip, long speed, int cycles, float hue_step=10, float secondary_hue_step=10, float max_hue=360, float saturation=100.0, float intensity=100.0) {
+  int iterations = cycles * (max_hue/hue_step);
+  float current_hue1, current_hue2 = 0;
+  Util::RGBColor color1, color2;
+  for (int i = 0; i < iterations; i++) {
+      color1 = Util::hsv2rgb(current_hue1, saturation, intensity);
+      color2 = Util::hsv2rgb(fmod(current_hue2 + max_hue/2, max_hue), saturation, intensity);
+      Effects::retroBulbBorderStrobe(strip, speed, 2, color1, color2);
+      current_hue1 += hue_step;
+      current_hue1 = fmod(current_hue1, max_hue);
+      current_hue2 += secondary_hue_step;
+      current_hue2 = fmod(current_hue2, max_hue);
   }
 
 }

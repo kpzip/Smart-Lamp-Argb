@@ -62,6 +62,7 @@ void loop() {
     Effects::rainbowWave(&strip, 6, wait_time);
     // Effects::retroBulbBorderStrobe(&strip, wait_time, 10, { .r = 255, .g = 0, .b = 0 });
     // Effects::rgbDrift(&strip, 10, 2);
+    // Effects::rgbStrobe(&strip, wait_time, 8, 10.0, 8.0);
 
   }
   else {
